@@ -1,15 +1,20 @@
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from pages.base_page import BasePage
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-class SearchFlightsPage(BasePage):
+class SearchFlightsPage:
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
 
-    FROM_CITY = (By.NAME, "fromPort")
-    TO_CITY = (By.NAME, "toPort")
-    FIND_FLIGHTS_BUTTON = (By.CSS_SELECTOR, "input[type='submit']")
+    def select_departure_city(self, city):
+        select = Select(self.wait.until(EC.presence_of_element_located((By.NAME, "fromPort"))))
+        select.select_by_visible_text(city)
 
-    def search_flight(self, from_city, to_city):
-        Select(self.wait_for_visibility(self.FROM_CITY)).select_by_visible_text(from_city)
-        Select(self.wait_for_visibility(self.TO_CITY)).select_by_visible_text(to_city)
-        self.wait_for_clickable(self.FIND_FLIGHTS_BUTTON).click()
+    def select_destination_city(self, city):
+        select = Select(self.wait.until(EC.presence_of_element_located((By.NAME, "toPort"))))
+        select.select_by_visible_text(city)
+
+    def search_flight(self):
+        self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit']"))).click()
