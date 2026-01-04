@@ -19,3 +19,6 @@ class PurchasePage:
     def get_confirmation_title(self):
         return self.wait.until(EC.presence_of_element_located(self.CONFIRMATION_TITLE)).text
     
+    def enter_credit_card(self, card_number):
+        self.wait.until(EC.presence_of_element_located((By.ID, "creditCardNumber"))).send_keys(card_number)
+    
